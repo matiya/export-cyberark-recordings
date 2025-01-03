@@ -1,0 +1,57 @@
+* PVWA Recording Exporter
+A Go utility for exporting PSM session recordings from CyberArk's Password Vault Web Access (PVWA).
+
+** Features
+- Authenticate with PVWA API
+- Download session recordings by month
+- Export recording metadata as JSON
+- Support for filtering by specific months
+
+** Installation
+*** Prerequisites
+- Go 1.21 or higher
+- Access to a PVWA instance
+- Valid PVWA credentials with auditor rights
+
+*** Building
+#+begin_src shell
+go mod download
+go build
+#+end_src
+
+** Usage
+The program can be run with several command-line flags:
+
+#+begin_src shell
+./export-recordings \
+  -baseURL "https://pvwa.example.com" \
+  -username "your-username" \
+  -months "5,6,7"
+#+end_src
+
+*** Command Line Options
+- =-baseURL=: PVWA API endpoint (default: "https://pvwa.example.com")
+- =-username=: PVWA username with auditor rights
+- =-months=: Months to process, either as range "1-12" or list "5,6,7"
+
+*** Authentication
+The program will look for credentials in this order:
+1. =PVWA_PASSWORD= environment variable
+2. Interactive password prompt
+
+*** Output
+Downloads are organized by month in the =downloaded_recordings/= directory:
+#+begin_src text
+downloaded_recordings/
+├── 5/
+│   ├── recording1.avi
+│   ├── recording1.json
+│   ├── recording2.avi
+│   └── recording2.json
+├── 6/
+└── 7/
+#+end_src
+
+Each recording is saved as:
+- An .avi video file
+- A JSON metadata file (check api/recordings.go)
